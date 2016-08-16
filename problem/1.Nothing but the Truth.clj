@@ -1,0 +1,3 @@
+; (= __ true)
+
+(= true true)
