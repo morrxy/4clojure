@@ -7,10 +7,13 @@
 
 
 (fn flt [s]
-  (cond
-    (nil? s) '()
-    (sequential? (first s)) (concat (flt (first s)) (flt (next s)))
-    :else (cons (first s) (flt (next s)))))
+  (mapcat (fn [x] (if (sequential? x) (flt x) [x])) s))
+
+
+(fn [s]
+  (filter (complement sequential?)
+    (tree-seq sequential? seq s)))
+
 
 (fn flt [s]
   (cond
@@ -23,11 +26,6 @@
   (if (coll? x)
     (mapcat flatten* x)
     [x]))
-
-
-(fn [s]
-  (filter (complement sequential?)
-    (tree-seq sequential? seq s)))
 
 
 (defn flt [s]

@@ -6,31 +6,7 @@
 ; (= (set (__ [:a "foo"  "bar" :b])) #{[:a :b] ["foo" "bar"]})
 ; (= (set (__ [[1 2] :a [3 4] 5 6 :b])) #{[[1 2] [3 4]] [:a :b] [5 6]})
 
-(defn f1 [s]
-  (->> s
-       (reduce (fn [acc x] (update acc (type x) conj x)) {})
-       (map #(nth % 1))
-       (map reverse)))
 
-(defn f1 [s]
-  (->> s
-       (reduce (fn [acc x] ) [])
-       (map #(nth % 1))
-       (map reverse)))
+(fn [s] (map second (group-by type s)))
 
-(fn [s]
-  (->> s
-       (reduce (fn [acc x] (update acc (type x) conj x)) {})
-       (map #(nth % 1))
-       (map reverse)))
-
-#(->> %
-      (reduce (fn [acc x] (update acc (type x) conj x)) {})
-      (map (fn [x] (nth x 1)))
-      (map reverse))
-
-(= (set (f1 [1 :a 2 :b 3 :c])) #{[1 2 3] [:a :b :c]})
-
-(= (set (f1 [:a "foo"  "bar" :b])) #{[:a :b] ["foo" "bar"]})
-
-(= (set (f1 [[1 2] :a [3 4] 5 6 :b])) #{[[1 2] [3 4]] [:a :b] [5 6]})
+(fn [s] (vals (group-by type s)))
