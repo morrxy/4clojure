@@ -23,4 +23,32 @@
 ; instance?
 ; getClass
 
-(fn [s])
+
+; solution:
+
+(fn [x]
+  (get {{} :map #{} :set} (empty x) (if (reversible? x) :vector :list)))
+
+#(condp = (nth (str %) 0)
+   \{ :map
+   \c :list
+   \[ :vector
+   \# :set)
+
+#(if
+   (and (associative? %)
+        (< 1 (count (flatten (list (last (seq (assoc % 0 1))))))))
+   :map
+   (let [c (conj % :a :b :c)]
+     (cond
+       (= (take-last 3 c) [:a :b :c]) :vector
+       (= (take      3 c) [:c :b :a]) :list
+       true :set)))
+
+(fn [x]
+  (let [t (conj (empty x) [:a :b] [:c :d])]
+    (cond
+      (:a t) :map
+      (get t 0) :vector
+      (get t [:a :b]) :set
+      :else :list)))

@@ -11,3 +11,19 @@
 (= (__ 3) false)
 
 ; solution:
+
+(fn [n]
+  (let [v (reduce + (map #(* % %) (for [x (str n)] (- (int x) 48))))]
+    (cond
+      (= 1 v) true
+      (= 4 v) false
+      :else (recur v))))
+
+
+(fn [n]
+  (loop [n n seen #{}]
+    (let [v (reduce + (map #(* % %) (for [x (str n)] (- (int x) 48))))]
+      (cond
+        (= 1 v) true
+        (seen v) false
+        :else (recur v (conj seen v))))))
