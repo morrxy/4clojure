@@ -1,37 +1,29 @@
 ; Topics:	seqs core-functions
 ; Write a function which flattens a sequence.
 
-; (= (__ '((1 2) 3 [4 [5 6]])) '(1 2 3 4 5 6))
-; (= (__ ["a" ["b"] "c"]) '("a" "b" "c"))
-; (= (__ '((((:a))))) '(:a))
+(= (__ '((1 2) 3 [4 [5 6]])) '(1 2 3 4 5 6))
 
+(= (__ ["a" ["b"] "c"]) '("a" "b" "c"))
 
-(fn flt [s]
-  (mapcat (fn [x] (if (sequential? x) (flt x) [x])) s))
+(= (__ '((((:a))))) '(:a))
 
+; solution
+
+(fn f [[h & t]]
+  (cond
+    (nil? h) ()
+    (sequential? h) (concat (f h) (f t))
+    true (cons h (f t))))
+
+(fn f [xs]
+  (mapcat #(if (sequential? %) (f %) [%]) xs))
 
 (fn [s]
   (filter (complement sequential?)
     (tree-seq sequential? seq s)))
 
 
-(fn flt [s]
-  (cond
-    (nil? s) '()
-    (coll? (first s)) (concat (flt (first s)) (flt (next s)))
-    :else (cons (first s) (flt (next s)))))
-
-
 (fn flatten* [x]
   (if (coll? x)
     (mapcat flatten* x)
     [x]))
-
-
-(defn flt [s]
-  (if (empty? s)
-    '()
-    (let [[x & xs] s]
-      (if (coll? x)
-        (concat (flt x) (flt xs))
-        (cons x (flt xs))))))
